@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="StudentsCompanion.SplashScreen" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#E7EFF4</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground_day</item>
+        <item name="postSplashScreenTheme">@style/Theme.StudentsCompanion</item>
+    </style>
+</resources>
