@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import com.imstudio.studentscompanion.repository.StuCompRepo
@@ -17,12 +18,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val studentsCompanionViewModel = StudentsCompanionViewModel(stuCompRepo = StuCompRepo())
 
-        studentsCompanionViewModel.getDeptByInit()
-
         installSplashScreen().setKeepOnScreenCondition {
             studentsCompanionViewModel.isLoading.value
         }
+
+        studentsCompanionViewModel.getDeptByInit()
         setContent {
+            val context = LocalContext.current
+            context.cacheDir
             val navController = rememberNavController()
             StudentsCompanionTheme {
                 // A surface container using the 'background' color from the theme

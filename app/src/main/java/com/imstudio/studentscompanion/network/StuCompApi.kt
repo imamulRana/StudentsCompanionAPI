@@ -5,12 +5,18 @@ import com.imstudio.studentscompanion.model.Bus
 import com.imstudio.studentscompanion.model.Classes
 import com.imstudio.studentscompanion.model.Department
 import com.imstudio.studentscompanion.model.Section
+import okhttp3.Cache
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
+import java.io.File
 
-const val BASE_URL = "https://studentscompanion.as.r.appspot.com/api/"
+
+const val BASE_URL = "https://studentcomp.onrender.com/api/"
+
+val cacheSize = (5 * 1024 * 1024).toLong()
 
 interface StuCompApi {
     @GET("department")
@@ -29,7 +35,7 @@ interface StuCompApi {
     suspend fun getAllClass(
         @Path("department_id") departmentId: Int,
         @Path("batch_id") batchId: Int,
-        @Path("section_id") sectionId: Int
+        @Path("section_id") sectionId: Int,
     ): List<Classes>
 
     @GET("bus/1/route")
@@ -39,12 +45,16 @@ interface StuCompApi {
     suspend fun getDownRouteData(): List<Bus>
 }
 
-
 object RetrofitInstance {
+    private val okHttpClient =
+        OkHttpClient.Builder()
+            .cache(Cache(File.createTempFile("StuCompResponse", null), cacheSize))
+            .build()
 
     private val retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

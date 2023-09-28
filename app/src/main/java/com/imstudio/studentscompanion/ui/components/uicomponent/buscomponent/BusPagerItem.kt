@@ -37,8 +37,8 @@ fun BusPagerItem(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Box(
-                modifier = modifier.weight(.5f),
-                contentAlignment = Alignment.Center
+                modifier = modifier.weight(.6f),
+                contentAlignment = Alignment.CenterStart
             ) {
                 Text(
                     modifier = modifier
@@ -50,7 +50,7 @@ fun BusPagerItem(
             Box(
                 modifier = modifier
                     .weight(2f)
-                    .padding(start = Padding.largePadding),
+                    .padding(start = Padding.mediumPadding),
                 contentAlignment = Alignment.CenterStart
             ) {
                 Text(
@@ -87,3 +87,4 @@ fun BusPagerItem(
         }
     }
 }
+

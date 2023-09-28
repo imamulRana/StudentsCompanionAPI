@@ -1,5 +1,6 @@
 package com.imstudio.studentscompanion.screens
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.imstudio.studentscompanion.R
@@ -44,6 +46,8 @@ fun LoginScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val loginUiState by studentsCompanionViewModel.loginUiState.collectAsState()
+    val sharedPreferences = LocalContext.current.getSharedPreferences("oka", Context.MODE_PRIVATE)
+    val editor = sharedPreferences.edit()
 
     val snackBarHostState = remember {
         SnackbarHostState()
@@ -133,6 +137,13 @@ fun LoginScreen(
                             loginUiState.section.id,
                             loginUiState.section.section
                         )
+                        editor.putInt("dept", loginUiState.department.id).apply()
+                        editor.putInt("batc", loginUiState.batch.id).apply()
+                        editor.putInt("sect", loginUiState.section.id).apply()
+                        editor.putString("deptS",loginUiState.department.department).apply()
+                        editor.putString("batcS",loginUiState.batch.batch).apply()
+                        editor.putString("sectS",loginUiState.section.section).apply()
+
                         onNextNavigate()
                     }
                 }

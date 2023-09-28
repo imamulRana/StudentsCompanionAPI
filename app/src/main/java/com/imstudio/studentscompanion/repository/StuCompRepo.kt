@@ -7,7 +7,7 @@ import com.imstudio.studentscompanion.model.Department
 import com.imstudio.studentscompanion.model.Section
 import com.imstudio.studentscompanion.network.RetrofitInstance
 
-class StuCompRepo {
+class StuCompRepo() {
     suspend fun getAllDept(): List<Department> {
         return RetrofitInstance.retrofitService.getAllDept()
     }

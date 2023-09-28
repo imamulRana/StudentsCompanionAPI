@@ -1,5 +1,6 @@
 package com.imstudio.studentscompanion.screens
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,6 +29,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.navigation.NavController
@@ -54,6 +56,7 @@ fun SettingsScreen(
     val snackBarHostState = remember {
         SnackbarHostState()
     }
+    val sharedPreferences = LocalContext.current.getSharedPreferences("oka", Context.MODE_PRIVATE)
     Scaffold(snackbarHost = {
         SnackbarHost(
             snackBarHostState,
@@ -100,23 +103,20 @@ fun SettingsScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         AboutInfoComponent(
-                            title = "Update Routines",
+                            title = "Routine Version",
                             description = "Make Sure That You Have Internet Connection"
                         )
-
                         IconButton(
                             modifier = modifier
                                 .padding(end = Padding.smallPadding), onClick = {
                                 coroutineScope.launch {
                                     snackBarHostState.showSnackbar("Routine Updated")
+                                    studentsCompanionViewModel.getAllClass(
+                                        loginUiState.section.id,
+                                        loginUiState.section.section
+                                    )
                                 }
                             }) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.refresh),
-                                contentDescription = "Refresh",
-                                tint = MaterialTheme.colorScheme.secondary
-
-                            )
                         }
                     }
                 }
@@ -164,6 +164,8 @@ fun SettingsScreen(
                 shape = RoundedCornerShape(25),
                 onClick = {
 //                    studentsCompanionViewModel.resetAll()
+                    sharedPreferences.edit().clear().apply()
+
                     navController.navigate(Screens.LoginScreen.route)
                 }) {
                 Text(

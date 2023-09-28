@@ -10,6 +10,7 @@ import com.imstudio.studentscompanion.model.Department
 import com.imstudio.studentscompanion.model.LoginUiState
 import com.imstudio.studentscompanion.model.Section
 import com.imstudio.studentscompanion.repository.StuCompRepo
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -47,7 +48,7 @@ class StudentsCompanionViewModel(private val stuCompRepo: StuCompRepo) : ViewMod
 
 
     fun getDeptByInit() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val newList = stuCompRepo.getAllDept()
                 _isLoading.update { false }
@@ -58,7 +59,7 @@ class StudentsCompanionViewModel(private val stuCompRepo: StuCompRepo) : ViewMod
     }
 
     fun getBatchByDept(deptId: Int, dept: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val newList = stuCompRepo.getAllBatch(deptId)
                 _batches.update {
@@ -76,7 +77,7 @@ class StudentsCompanionViewModel(private val stuCompRepo: StuCompRepo) : ViewMod
     }
 
     fun getSectionByBatch(batchId: Int, batch: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val newList =
                     stuCompRepo.getAllSection(dept = _loginUiState.value.department.id, batchId)
@@ -97,16 +98,18 @@ class StudentsCompanionViewModel(private val stuCompRepo: StuCompRepo) : ViewMod
     }
 
     fun getAllClass(sectionId: Int, section: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val newList = stuCompRepo.getAllClass(
                     _loginUiState.value.department.id,
                     _loginUiState.value.batch.id,
                     sectionId
                 )
+
                 _classes.update {
                     newList
                 }
+                Log.d("Classes", _classes.value.toString())
                 _loginUiState.update { loginUiState ->
                     loginUiState
                         .copy(
@@ -121,7 +124,7 @@ class StudentsCompanionViewModel(private val stuCompRepo: StuCompRepo) : ViewMod
     }
 
     fun getUpData() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val newList = stuCompRepo.getUpData()
                 _upData.update {
@@ -133,7 +136,7 @@ class StudentsCompanionViewModel(private val stuCompRepo: StuCompRepo) : ViewMod
     }
 
     fun getDownData() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val newList = stuCompRepo.getDownData()
                 _downData.update {
@@ -141,6 +144,12 @@ class StudentsCompanionViewModel(private val stuCompRepo: StuCompRepo) : ViewMod
                 }
             } catch (_: IOException) {
             }
+        }
+    }
+
+    fun updateLoginUiState(loginUiState: LoginUiState) {
+        _loginUiState.update {
+            loginUiState
         }
     }
 }
