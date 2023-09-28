@@ -45,7 +45,6 @@ fun NavigationGraph(
         composable(Screens.BusRouteScreen.route) {
             BusRouteScreen(
                 navController = navController,
-                studentsCompanionViewModel = studentsCompanionViewModel
             )
         }
         composable(Screens.BusUpSchedules.route) {
